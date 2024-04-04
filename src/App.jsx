@@ -1,7 +1,10 @@
 import "./App.css";
+import { OrderList } from "./components/orders/OrderList";
 
 function App() {
-  return <div className="App">Shepherd's Pies</div>;
+  return <div>
+    {<OrderList/>}
+    </div>
 }
 
 export default App;
