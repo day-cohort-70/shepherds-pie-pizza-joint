@@ -1,18 +1,37 @@
-import Dropdown from "react-bootstrap/Dropdown"
 
-export const FilterBar = () => {
+import { useState, useEffect } from "react";
+
+export const FilterBar = ({setDate, date}) => {
+  
+
+    useEffect(() => {
+      // Function to format date as 'yyyy-mm-dd'
+      const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+  
+      // Get today's date
+      const today = new Date();
+      const formattedDate = formatDate(today);
+  
+      // Set today's date as the initial value of the datepicker input field
+      setDate(formattedDate);
+    }, [])
+
+ 
 
     return (
-        <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Dropdown Button
-          </Dropdown.Toggle>
-    
-          <Dropdown.Menu>
-            <Dropdown.Item >Action</Dropdown.Item>
-            <Dropdown.Item >Another action</Dropdown.Item>
-            <Dropdown.Item >Something else</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      )
-}
+        <div>
+                <label htmlFor="datepicker">Select a Date </label>  
+                <input
+                type="date"
+                id="datepicker"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+            />
+      </div>
+    );
+  }

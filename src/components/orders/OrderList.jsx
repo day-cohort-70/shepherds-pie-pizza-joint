@@ -6,6 +6,7 @@ import { FilterBar } from "./FilterBar"
 
 export const OrderList = () => {
     const [orders, setOrders] = useState([])
+    const [date, setDate] = useState('')
 
 const getAndSetOrders = () => {
     getAllOrders().then(ordersArr => {
@@ -13,20 +14,22 @@ const getAndSetOrders = () => {
             const dateA = new Date(a.date)
             const dateB = new Date(b.date)
             return dateB - dateA
-        })
+        }) 
         setOrders(ordersArr)
     })
 }
-    
-    useEffect(() => {
-        getAndSetOrders()
-    }, [])
+
+useEffect(() => {
+    getAndSetOrders()
+}, [])
+
+//define function that filters orders for orders that have dates that match the date state.
 
 
     return (
         <div className="orders-container">
             <h2>Orders</h2>
-            <FilterBar/>
+            <FilterBar setDate={setDate} date={date}/>
             <article className="orders">
                 {orders.map((order) => {
                     return (
