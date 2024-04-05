@@ -2,12 +2,18 @@ import { useEffect, useState } from "react"
 import { getAllOrders } from "../../services/OrdersService"
 import "./orders.css"
 import Button from 'react-bootstrap/Button'
+import { FilterBar } from "./FilterBar"
 
 export const OrderList = () => {
     const [orders, setOrders] = useState([])
 
 const getAndSetOrders = () => {
     getAllOrders().then(ordersArr => {
+        ordersArr.sort((a, b) => {
+            const dateA = new Date(a.date)
+            const dateB = new Date(b.date)
+            return dateB - dateA
+        })
         setOrders(ordersArr)
     })
 }
@@ -20,6 +26,7 @@ const getAndSetOrders = () => {
     return (
         <div className="orders-container">
             <h2>Orders</h2>
+            <FilterBar/>
             <article className="orders">
                 {orders.map((order) => {
                     return (
