@@ -41,8 +41,8 @@ export const OrderList = () => {
 
     return (
         <div className="orders-container">
-            <h2>Orders</h2>
-            <FilterBar setDate={setDate} date={date} />
+            <h1>Orders</h1>
+            <FilterBar setDate={setDate} date={date}/>
             <article className="orders">
                 {filteredOrders.map((order) => {
                     return (

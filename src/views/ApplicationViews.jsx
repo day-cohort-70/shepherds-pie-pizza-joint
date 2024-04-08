@@ -4,15 +4,20 @@ import { OrderDetails } from "../components/orders/OrderDetails" // Import Order
 import { useEffect, useState } from "react"
 import NavBar from "../components/nav/NavBar"
 import { OrderList } from "../components/orders/OrderList"
+import { NewOrder } from "../components/orders/NewOrder"
 
 export const ApplicationViews = () => {
-    const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState({})
+  const [service, setService] = useState({type: "", table: 0})
 
-    useEffect(() => {
-        const localPizzaUser = localStorage.getItem('pizza_user')
-        const pizzaUserObject = JSON.parse(localPizzaUser)
-        setCurrentUser(pizzaUserObject)
-    }, [])
+  
+  useEffect(() => {
+    const localPizzaUser = localStorage.getItem('pizza_user')
+    const pizzaUserObject = JSON.parse(localPizzaUser)
+
+    setCurrentUser(pizzaUserObject)
+  }, [])
+
 
     return (
         <Routes>
@@ -29,7 +34,7 @@ export const ApplicationViews = () => {
                     <Route path=':orderId' element={<OrderDetails currentUser={currentUser}/>} />
                     
                 </Route>
-                <Route path='/NewOrder' element={<h1>new order shit here bruh</h1>} />
+                <Route path='/NewOrder' element={<NewOrder service={service} setService={setService}/>} />
                 <Route path='/Employees' element={<h1>employye list here bruh</h1>} />
                 <Route path='/SalesReport' element={<h1>sales report here bruh</h1>} />
             </Route>
