@@ -3,19 +3,16 @@ import { Navbar, Nav } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import './NavBar.css'
 
-const NavBar = ({ currentUser, shoppingCart }) => {
+const NavBar = ({ currentUser}) => {
   const navigate = useNavigate()
 
-  const totalItems = shoppingCart.length
 
-  const playClickSound = () => {
-    const audio = new Audio(clickSound)
-    audio.play()
-  }
+
+ 
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
-      <Navbar.Brand as={Link} to="/" className="nav-header" onClick={playClickSound}>
+      <Navbar.Brand as={Link} to="/" className="nav-header">
         🍕 <span className="navbar-title">Shepherd's Pies</span> 🍕
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -26,7 +23,7 @@ const NavBar = ({ currentUser, shoppingCart }) => {
           <Nav.Link as={Link} to="/employees" className="nav-link">Employees</Nav.Link>
           <Nav.Link as={Link} to="/salesReport" className="nav-link">Sales Report</Nav.Link>
           <Nav.Link as={Link} to="/" onClick={() => {
-            localStorage.removeItem("currentUser")
+            localStorage.removeItem("pizza_user")
             navigate("/", { replace: true })
           }} className="nav-link">Logout</Nav.Link>
         </Nav>
