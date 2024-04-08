@@ -1,11 +1,19 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button, Dropdown } from "react-bootstrap"
+import { useNavigate } from "react-router-dom"
+import { postNewOrder } from "../../services/OrdersService"
 
-export const NewOrder = ({service, setService}) => {
-
+export const NewOrder = ({service, setService, currentUser}) => {
+    const navigate = useNavigate()
     //on change, save event target value as string for state of 'service.type' 
     //based on that, if the state is equal to 'dine-in', display a new dorpdown for table number, and save event target value as 
     // table number in state service.table
+
+useEffect(() => {
+    service.type === "Delivery" && (
+        service.table = 0
+    )
+}, [service])
 
     const handleServiceTypeChange = (type) => {
         setService({...service, type})
@@ -16,7 +24,23 @@ export const NewOrder = ({service, setService}) => {
     }
     const tables = [1,2,3,4,5,6,7,8,9,10]
 
-    
+    const handleCreateOrder = async () => {
+        const today = Date.now()
+        const order = {
+            "userId": currentUser.id,
+            "date": today,
+            "tableNumber": service.table,
+            "tipAmount": 0,
+            "orderTotal": 0,
+            "serviceType": service.type
+        }
+        const response = await postNewOrder(order)
+        const responseData = await response.json()
+        const newOrderId = responseData.id
+        newOrderId && (
+            navigate(`/orderList/${newOrderId}`)
+        )
+    }
 
     return (
         <>
@@ -27,13 +51,11 @@ export const NewOrder = ({service, setService}) => {
           </Dropdown.Toggle>
     
           <Dropdown.Menu>
-            <Dropdown.Item 
-            href="#/action-1"  
+            <Dropdown.Item   
             onClick={() => handleServiceTypeChange("Dine-In")}
             >Dine In
             </Dropdown.Item>
-            <Dropdown.Item 
-            href="#/action-2" 
+            <Dropdown.Item  
             onClick={() => handleServiceTypeChange("Delivery")}
             >Delivery</Dropdown.Item>
           </Dropdown.Menu>
@@ -58,7 +80,7 @@ export const NewOrder = ({service, setService}) => {
         )}
 
         {service.type === "Delivery" && (
-            <Button className="btn-secondary" variant="success">Create Order</Button>
+            <Button className="btn-secondary" variant="success" onClick={() => handleCreateOrder()}>Create Order</Button>
         )}
 
             </>

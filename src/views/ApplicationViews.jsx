@@ -34,7 +34,7 @@ export const ApplicationViews = () => {
                     <Route path=':orderId' element={<OrderDetails currentUser={currentUser}/>} />
                     
                 </Route>
-                <Route path='/NewOrder' element={<NewOrder service={service} setService={setService}/>} />
+                <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
                 <Route path='/Employees' element={<h1>employye list here bruh</h1>} />
                 <Route path='/SalesReport' element={<h1>sales report here bruh</h1>} />
             </Route>
