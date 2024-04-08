@@ -5,7 +5,7 @@ import "./OrderDetails.css"
 
 
 import { getOrderById } from "../../services/OrdersService";
-import { getAllPizzaToppings, getPizzasByOrderId, getToppingsByPizzaId } from "../../services/PizzaServices";
+import { deletePizzaById, getAllPizzaToppings, getPizzasByOrderId, getToppingsByPizzaId } from "../../services/PizzaServices";
 
 
 
