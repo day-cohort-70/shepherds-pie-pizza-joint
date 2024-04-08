@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import { getAllOrders } from "../../services/OrdersService"
+
 import "./orders.css"
 import Button from 'react-bootstrap/Button'
 import { FilterBar } from "./FilterBar"
+import { getAllOrders } from "../../services/OrdersService"
 
 export const OrderList = () => {
     const [orders, setOrders] = useState([])
