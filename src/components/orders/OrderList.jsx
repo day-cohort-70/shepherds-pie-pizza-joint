@@ -46,7 +46,7 @@ useEffect(() => {
 
     return (
         <div className="orders-container">
-            <h2>Orders</h2>
+            <h1>Orders</h1>
             <FilterBar setDate={setDate} date={date}/>
             <article className="orders">
                 {filteredOrders.map((order) => {
