@@ -28,7 +28,11 @@ getAllPizzaToppings().then((toppings) => setPizzaToppings(toppings))
 
 }, [orderId])
 
-
+const handleDeletePizza = (pizzaId) => {
+    deletePizzaById(pizzaId).then(() => {
+        getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
+    })   
+  }
 
 
 
@@ -55,7 +59,7 @@ return (
                     </div>
                     <div className="orderlist-btns">
                         <Button variant="warning" className="btn-info">Edit</Button>
-                        <Button variant="danger" className="btn-info">Delete</Button>
+                        <Button variant="danger" className="btn-info" onClick={() => handleDeletePizza(pizza.id)}>Delete</Button>
                     </div>
                 </div>
             ))}
