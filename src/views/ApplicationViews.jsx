@@ -5,10 +5,12 @@ import { useEffect, useState } from "react"
 import NavBar from "../components/nav/NavBar"
 import { OrderList } from "../components/orders/OrderList"
 import { NewOrder } from "../components/orders/NewOrder"
+import { getAllUsers } from "../services/userService"
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({})
   const [service, setService] = useState({type: "", table: 0})
+  const [employees, setEmployees] = useState([])
 
   
   useEffect(() => {
@@ -18,6 +20,11 @@ export const ApplicationViews = () => {
     setCurrentUser(pizzaUserObject)
   }, [])
 
+  useEffect(() => {
+    getAllUsers().then((users) => {
+        setEmployees(users)
+    })
+  }, [])
 
     return (
         <Routes>
@@ -31,7 +38,7 @@ export const ApplicationViews = () => {
              
                 <Route path='/orderList' >
                     <Route index element={<OrderList currentUser={currentUser} />}/>
-                    <Route path=':orderId' element={<OrderDetails currentUser={currentUser}/>} />
+                    <Route path=':orderId' element={<OrderDetails currentUser={currentUser} service={service} employees={employees}/>} />
                     
                 </Route>
                 <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />

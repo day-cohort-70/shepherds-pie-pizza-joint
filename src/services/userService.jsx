@@ -1,5 +1,5 @@
-export const getNonAdminUsers = () => {
-    return fetch("http://localhost:8088/users?isAdmin=false").then(res => res.json())
+export const getAllUsers = () => {
+    return fetch("http://localhost:8088/users").then(res => res.json())
 }
 
 export const getAdminUsers = () => {
