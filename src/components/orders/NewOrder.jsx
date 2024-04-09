@@ -74,7 +74,7 @@ useEffect(() => {
                 </Dropdown.Menu>
             </Dropdown>
             {(service.table > 0 || service.table === "") && (
-                <Button className="btn-secondary" variant="success">Create Order</Button>
+                <Button className="btn-secondary" variant="success" onClick={() => handleCreateOrder()}>Create Order</Button>
             )}
         </>
         )}
