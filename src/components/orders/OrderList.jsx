@@ -3,7 +3,7 @@ import { Link } from "react-router-dom" // Import Link from react-router-dom
 import "./orders.css"
 import Button from 'react-bootstrap/Button'
 import { FilterBar } from "./FilterBar"
-import { getAllOrders } from "../../services/OrdersService"
+import { deleteOrderById, getAllOrders } from "../../services/OrdersService"
 
 export const OrderList = () => {
     const [orders, setOrders] = useState([])
@@ -39,6 +39,12 @@ export const OrderList = () => {
         setFilteredOrders(dateFilteredOrders)
     }, [orders, date])
 
+
+    const handleDeleteOrder = async (orderId) => {
+        await deleteOrderById(orderId)
+        getAndSetOrders()
+    }
+
     return (
         <div className="orders-container">
             <h1>Orders</h1>
@@ -51,11 +57,11 @@ export const OrderList = () => {
                             <div className="order-details">{epochToDate(order.date)}</div>
                             <div className="order-details">Order Total: ${order.orderTotal}</div>
                             <div className="orderlist-btns">
-                                {/* Wrap the button with a Link component */}
+                                
                                 <Link to={`/orderList/${order.id}`}>
                                     <Button variant="warning" className="btn-info">View Order</Button>
                                 </Link>
-                                <Button variant="danger" className="btn-info">Delete</Button>
+                                <Button variant="danger" className="btn-info" onClick={() => handleDeleteOrder(order.id)}>Delete</Button>
                             </div>
                         </section>
                     )
