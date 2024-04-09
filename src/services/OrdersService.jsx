@@ -1,7 +1,7 @@
 import { deletePizzaById } from "./PizzaServices"
 
 export const getAllOrders = () => {
-    return fetch("http://localhost:8088/orders").then(res => res.json())
+    return fetch("http://localhost:8088/orders?_embed=pizzas").then(res => res.json())
 }
 
 export const getOrderById = async (orderId) => {
