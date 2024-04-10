@@ -68,3 +68,13 @@ export const updateDeliverer = async (delivererObj, orderDelivererId) => {
         body: JSON.stringify(delivererObj)
     })
 }
+
+export const updateOrder = async (updatedOrder) => {
+    await fetch(`http://localhost:8088/orders/${updatedOrder.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedOrder)
+    })
+}

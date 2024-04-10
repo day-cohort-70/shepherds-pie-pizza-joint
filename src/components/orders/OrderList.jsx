@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import "./orders.css"
 import Button from 'react-bootstrap/Button'
 import { FilterBar } from "./FilterBar"
-import { deleteOrderById, getAllOrders } from "../../services/OrdersService"
+import { deleteOrderById, getAllOrders, updateOrder } from "../../services/OrdersService"
 import { getAllPizzaToppings, getPizzasByOrderId } from "../../services/PizzaServices"
 
 export const OrderList = () => {
@@ -12,6 +12,8 @@ export const OrderList = () => {
     const [filteredOrders, setFilteredOrders] = useState([])
     const [orderTotals, setOrderTotals] = useState({})
     const [toppings, setToppings] = useState([])
+    const [totalPizzaPrices, setTotalPizzaPrices] = useState({})
+    const [tipAmounts, setTipAmounts] = useState({})
 
     const getAndSetOrders = () => {
         getAllOrders().then(ordersArr => {
@@ -37,11 +39,15 @@ export const OrderList = () => {
     useEffect(() => {
         const calculateOrderTotals = async () => {
             const totals = {}
+          
             for (const order of filteredOrders) {
                 const total = await calculateOrderTotal(order)
                 totals[order.id] = total
+             
             }
             setOrderTotals(totals)
+          
+            
         }
 
         calculateOrderTotals()
@@ -61,6 +67,20 @@ export const OrderList = () => {
         getAndSetOrders()
     }
 
+    const handleTipInputChange = (orderId, tipAmount) => {
+        setTipAmounts(prevState => ({
+            ...prevState,
+            [orderId]: tipAmount
+        }));
+    };
+
+    const handleAddTip = async (orderId) => {
+        const updatedOrder = { ...orders.find(order => order.id === orderId) };
+        updatedOrder.tipAmount = tipAmounts[orderId];
+        await updateOrder(updatedOrder);
+        getAndSetOrders();
+    };
+
     const calculatePizzaPrice = async (pizza) => {
         let price = pizza.size.price
         const pizzaToppings = await toppings?.filter((topping) => topping.pizzaId === pizza.id)
@@ -72,36 +92,79 @@ export const OrderList = () => {
     
 
     const calculateOrderTotal = async (order) => {
-        let totalPrice = 0
-        const pizzasArray = await getPizzasByOrderId(order.id)
-        
+        let totalPrice = 0;
+        let pizzaTotalPrice = 0;
+    
+        const pizzasArray = await getPizzasByOrderId(order.id);
+    
         await Promise.all(pizzasArray.map(async (pizza) => {
-            const pizzaPrice = await calculatePizzaPrice(pizza)
-            totalPrice += pizzaPrice
-        }))
-        
-        return totalPrice
-    }
+            const pizzaPrice = await calculatePizzaPrice(pizza);
+            pizzaTotalPrice += pizzaPrice;
+        }));
+    
+        setTotalPizzaPrices(prevState => ({
+            ...prevState,
+            [order.id]: pizzaTotalPrice
+        }));
+    
+        totalPrice += pizzaTotalPrice;
+    
+        if (order.serviceType === "Delivery") {
+            totalPrice += 5;
+        }
+        totalPrice += parseInt(order.tipAmount)
+    
+        return totalPrice;
+    };
+    
 
     return (
         <div className="orders-container">
-            <h1>Orders</h1>
+            <h1 className="text-center mb-4">Orders</h1>
             <FilterBar setDate={setDate} date={date}/>
-            <article className="orders">
+            <div className="row">
                 {filteredOrders.map((order) => (
-                    <section className="order" key={order.id}>
-                        <header className="order-header">Order #{order.id}</header>
-                        <div className="order-details">{epochToDate(order.date)}</div>
-                        <div className="order-details">Order Total: ${orderTotals[order.id]}</div>
-                        <div className="orderlist-btns">
-                            <Link to={`/orderList/${order.id}`}>
-                                <Button variant="warning" className="btn-info">View Order</Button>
-                            </Link>
-                            <Button variant="danger" className="btn-info" onClick={() => handleDeleteOrder(order.id)}>Delete</Button>
+                    <div className="col-lg-4 col-md-6 mb-4" key={order.id}>
+                        <div className="card">
+                            <div className="card-header">
+                                Order #{order.id}
+                            </div>
+                            <div className="card-body">
+                                <p className="card-text">DATE: {epochToDate(order.date)}</p>
+                                <p className="card-text">PIZZA TOTAL: ${totalPizzaPrices[order.id]}</p>
+                                {order.serviceType === "Delivery" ? (
+                                    <p className="card-text">DELIVERY CHARGE: $5</p>
+                                ) : (
+                                    ""
+                                )}
+                                <p className="card-text">TIP AMOUNT: ${order.tipAmount}</p>
+                                <p className="card-text">Order Total: ${orderTotals[order.id]}</p>
+                                <div className="form-group">
+                                    <input
+                                        type="number"
+                                        className="form-control mb-2"
+                                        placeholder="Enter tip amount"
+                                        value={tipAmounts[order.id] || ''}
+                                        onChange={(e) => handleTipInputChange(order.id, e.target.value)}
+                                    />
+                                    <Button
+                                        variant="success"
+                                        className="btn-block"
+                                        onClick={() => handleAddTip(order.id)}
+                                    >
+                                        ADJUST TIP
+                                    </Button>
+                                </div>
+                                
+                            </div>
+                            <div className="card-footer text-center">
+                                <Link to={`/orderList/${order.id}`} className="btn btn-warning btn-sm mr-2">View Order</Link>
+                                <Button variant="danger" className="btn-sm" onClick={() => handleDeleteOrder(order.id)}>Delete</Button>
+                            </div>
                         </div>
-                    </section>
+                    </div>
                 ))}
-            </article>
+            </div>
         </div>
     )
 }
