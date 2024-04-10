@@ -46,10 +46,13 @@ const handleDeletePizza = (pizzaId) => {
         getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
     })   
 }
-
-const handleDelivererChange = (employee) => {
-    setDelivererSelection(employee)
-    
+const handleDelivererChange = (employee) => {setDelivererSelection(employee)}
+     const calculatePizzaPrice = (pizza) => {
+    // Calculate price based on size
+    let price = pizza.size.price;
+    // Calculate price based on number of toppings
+    price += pizzaToppings?.filter((pizzaTopping) => pizzaTopping.pizzaId === pizza.id).length * 0.5; // Assuming each topping costs 50 cents
+    return price;
 }
 // variable used to display the assigned driver to this order once it has been posted to the database
 
@@ -124,14 +127,14 @@ return (
                     <div className="order-details">Cheese: {pizza.cheese.type}</div>
                     <div className="order-details">Toppings:
                         <ul>
-                        {pizzaToppings && pizzaToppings
-    .filter((pizzaTopping) => pizzaTopping.pizzaId === pizza.id)
-    .map((pizzaTopping) => (
-        <li key={pizzaTopping.id}>{pizzaTopping.topping.type}</li>
-))}
-
+                            {pizzaToppings && pizzaToppings
+                                .filter((pizzaTopping) => pizzaTopping.pizzaId === pizza.id)
+                                .map((pizzaTopping) => (
+                                    <li key={pizzaTopping.id}>{pizzaTopping.topping.type}</li>
+                            ))}
                         </ul>
                     </div>
+                    <div className="order-details">Price: ${calculatePizzaPrice(pizza).toFixed(2)}</div>
                     <div className="orderlist-btns">
                         <Button variant="warning" className="btn-info">Edit</Button>
                         <Button variant="danger" className="btn-info" onClick={() => handleDeletePizza(pizza.id)}>Delete</Button>
@@ -146,5 +149,5 @@ return (
         </div>
     </Container>
 );
-};
-
+;
+}

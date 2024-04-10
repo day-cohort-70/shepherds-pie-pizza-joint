@@ -1,7 +1,7 @@
 import { deletePizzaById } from "./PizzaServices"
 
 export const getAllOrders = () => {
-    return fetch("http://localhost:8088/orders").then(res => res.json())
+    return fetch("http://localhost:8088/orders?_embed=pizzas").then(res => res.json())
 }
 
 export const getOrderById = async (orderId) => {
@@ -70,5 +70,15 @@ export const updateDeliverer = async (delivererObj, orderDelivererId) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(delivererObj)
+    })
+}
+
+export const updateOrder = async (updatedOrder) => {
+    await fetch(`http://localhost:8088/orders/${updatedOrder.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedOrder)
     })
 }
