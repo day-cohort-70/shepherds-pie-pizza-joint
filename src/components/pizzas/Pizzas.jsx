@@ -13,6 +13,7 @@ import { savePizza } from "../../services/pizzaServices.js";
 export const Pizzas = () => {
   const [pizzaOptions, setPizzaOptions] = useState({});
   const { pizzaId } = useParams;
+  const testPizzaId = 1;
 
   useEffect(() => {}, []);
 
@@ -45,7 +46,7 @@ export const Pizzas = () => {
       </Stack>
       <Button
         onClick={() => {
-          savePizza(pizzaId, pizzaOptions);
+          savePizza(testPizzaId, pizzaOptions);
         }}
       >
         Save Pizza

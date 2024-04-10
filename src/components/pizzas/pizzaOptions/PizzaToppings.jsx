@@ -1,6 +1,6 @@
 import {
-  addPizzaTopping,
   getPizzaToppings,
+  selectPizzaTopping,
 } from "../../../services/pizzaServices.js";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
@@ -11,6 +11,7 @@ export const PizzaToppings = ({ pizzaOptions, setPizzaOptions }) => {
   //to add one topping at a time to pizza
   const [addPizzaTopping, setAddPizzaTopping] = useState("");
   const { pizzaId } = useParams();
+  const testPizzaID = 1;
 
   useEffect(() => {
     getPizzaToppings().then((pizzaToppingOptions) => {
@@ -29,6 +30,7 @@ export const PizzaToppings = ({ pizzaOptions, setPizzaOptions }) => {
         <Form
           onChange={(event) => {
             //get topping selection
+            console.log(event.target.value);
             setAddPizzaTopping(event.target.value);
           }}
         >
@@ -52,7 +54,8 @@ export const PizzaToppings = ({ pizzaOptions, setPizzaOptions }) => {
               variant="primary"
               size="sm"
               onClick={() => {
-                addPizzaTopping(pizzaId, addPizzaTopping);
+                console.log(addPizzaTopping);
+                selectPizzaTopping(testPizzaID, addPizzaTopping);
               }}
             >
               Add Topping
