@@ -4,7 +4,7 @@ import { Card, Container, Row, Col, Button, Dropdown } from 'react-bootstrap'
 import "./OrderDetails.css"
 
 
-import { AssignDeliverer, getOrderById } from "../../services/OrdersService";
+import { assignDeliverer, getOrderById, updateDeliverer } from "../../services/OrdersService";
 import { deletePizzaById, getAllPizzaToppings, getPizzasByOrderId, getToppingsByPizzaId } from "../../services/PizzaServices";
 import { getAllOrderDeliverers } from "../../services/OrderDelivererService";
 
@@ -53,14 +53,20 @@ const handleDelivererChange = (employee) => {
 }
 // variable used to display the assigned driver to this order once it has been posted to the database
 
-const handleAssignDeliverer = () => {
+const handleAssignDeliverer = async () => {
     const orderDelivererObj = {
         "orderId": order.id,
         "userId": delivererSelection.id
+    };
+    if (Object.keys(orderDeliverer).length === 0) {
+        await assignDeliverer(orderDelivererObj)
+        
+    } else {
+        await updateDeliverer(orderDelivererObj, orderDeliverer.id)
     }
-    AssignDeliverer(orderDelivererObj)
     getAndSetOrderDeliverer()
-}
+  
+};
 
 return (
     <Container className="mt-5">
