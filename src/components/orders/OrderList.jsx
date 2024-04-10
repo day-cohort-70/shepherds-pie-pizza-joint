@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import { FilterBar } from "./FilterBar"
 import { deleteOrderById, getAllOrders, updateOrder } from "../../services/OrdersService"
 import { getAllPizzaToppings, getPizzasByOrderId } from "../../services/PizzaServices"
+import Badge from 'react-bootstrap/Badge'
 
 export const OrderList = () => {
     const [orders, setOrders] = useState([])
@@ -71,15 +72,15 @@ export const OrderList = () => {
         setTipAmounts(prevState => ({
             ...prevState,
             [orderId]: tipAmount
-        }));
-    };
+        }))
+    }
 
     const handleAddTip = async (orderId) => {
-        const updatedOrder = { ...orders.find(order => order.id === orderId) };
-        updatedOrder.tipAmount = tipAmounts[orderId];
-        await updateOrder(updatedOrder);
-        getAndSetOrders();
-    };
+        const updatedOrder = { ...orders.find(order => order.id === orderId) }
+        updatedOrder.tipAmount = tipAmounts[orderId]
+        await updateOrder(updatedOrder)
+        getAndSetOrders()
+    }
 
     const calculatePizzaPrice = async (pizza) => {
         let price = pizza.size.price
@@ -92,30 +93,30 @@ export const OrderList = () => {
     
 
     const calculateOrderTotal = async (order) => {
-        let totalPrice = 0;
-        let pizzaTotalPrice = 0;
+        let totalPrice = 0
+        let pizzaTotalPrice = 0
     
-        const pizzasArray = await getPizzasByOrderId(order.id);
+        const pizzasArray = await getPizzasByOrderId(order.id)
     
         await Promise.all(pizzasArray.map(async (pizza) => {
-            const pizzaPrice = await calculatePizzaPrice(pizza);
-            pizzaTotalPrice += pizzaPrice;
-        }));
+            const pizzaPrice = await calculatePizzaPrice(pizza)
+            pizzaTotalPrice += pizzaPrice
+        }))
     
         setTotalPizzaPrices(prevState => ({
             ...prevState,
             [order.id]: pizzaTotalPrice
-        }));
+        }))
     
-        totalPrice += pizzaTotalPrice;
+        totalPrice += pizzaTotalPrice
     
         if (order.serviceType === "Delivery") {
-            totalPrice += 5;
+            totalPrice += 5
         }
         totalPrice += parseInt(order.tipAmount)
     
-        return totalPrice;
-    };
+        return totalPrice
+    }
     
 
     return (
@@ -127,7 +128,14 @@ export const OrderList = () => {
                     <div className="col-lg-4 col-md-6 mb-4" key={order.id}>
                         <div className="card">
                             <div className="card-header">
-                                Order #{order.id}
+                                <h2>Order #{order.id}</h2>
+                                <h3>{order.serviceType}</h3>
+                                {order.serviceType === "Dine-In" ? ( <h4><div className="card-text">
+    <span>Table</span> 
+    <Badge variant="success">
+      {order.tableNumber}
+    </Badge>
+</div></h4>) : ("")}
                             </div>
                             <div className="card-body">
                                 <p className="card-text">DATE: {epochToDate(order.date)}</p>
@@ -150,7 +158,13 @@ export const OrderList = () => {
                                     <Button
                                         variant="success"
                                         className="btn-block"
-                                        onClick={() => handleAddTip(order.id)}
+                                        onClick={() => {
+                                            if (!tipAmounts[order.id]) {
+                                                window.alert("Please enter a tip amount.")
+                                            } else {
+                                                handleAddTip(order.id)
+                                            }
+                                        }}
                                     >
                                         ADJUST TIP
                                     </Button>
@@ -158,7 +172,7 @@ export const OrderList = () => {
                                 
                             </div>
                             <div className="card-footer text-center">
-                                <Link to={`/orderList/${order.id}`} className="btn btn-warning btn-sm mr-2">View Order</Link>
+                                <Link to={`/orderList/${order.id}`} className="btn btn-warning btn-sm mr-2">EDIT ORDER</Link>
                                 <Button variant="danger" className="btn-sm" onClick={() => handleDeleteOrder(order.id)}>Delete</Button>
                             </div>
                         </div>
@@ -168,3 +182,5 @@ export const OrderList = () => {
         </div>
     )
 }
+
+

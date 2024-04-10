@@ -4,7 +4,7 @@ import { Card, Container, Row, Col, Button, Dropdown } from 'react-bootstrap'
 import "./OrderDetails.css"
 
 
-import { assignDeliverer, getOrderById, updateDeliverer } from "../../services/OrdersService";
+import { assignDeliverer, deleteOrderById, deleteOrderDelivererByOrderId, getOrderById, updateDeliverer } from "../../services/OrdersService";
 import { deletePizzaById, getAllPizzaToppings, getPizzasByOrderId, getToppingsByPizzaId } from "../../services/PizzaServices";
 import { getAllOrderDeliverers } from "../../services/OrderDelivererService";
 
@@ -17,6 +17,7 @@ const [pizzas, setPizzas] = useState([])
 const [pizzaToppings, setPizzaToppings] = useState()
 const [delivererSelection, setDelivererSelection] = useState({name: ""})
 const [orderDeliverer, setOrderDeliverer] = useState({})
+const navigate = useNavigate()
 
 //get and set orderDeliverers
 const getAndSetOrderDeliverer = () => {
@@ -30,7 +31,6 @@ useEffect(() => {
     getAndSetOrderDeliverer()
 }, [order])
 
-const navigate = useNavigate()
 let pizzaCounter = 0
 
 useEffect(() => {
@@ -71,6 +71,14 @@ const handleAssignDeliverer = async () => {
   
 };
 
+const handleDeleteOrder = async (orderId) => {
+    await deleteOrderById(orderId)
+
+    if (Object.keys(orderDeliverer).length !== 0) {
+        await (deleteOrderDelivererByOrderId(orderId))
+    } 
+    navigate('/orderList')
+}
 
 return (
     <Container className="mt-5">
@@ -136,8 +144,8 @@ return (
         </div>
         <div className="btn-bar">
         <Button variant="warning" size="lg">Add Pizza</Button>
-        <Button variant="warning" size="lg">All Orders</Button>
-        <Button variant="danger" size="lg">Delete Order</Button>
+        <Button variant="warning" size="lg" onClick={() => navigate('/orderList')}>Order List</Button>
+        <Button variant="danger" size="lg" onClick={() => handleDeleteOrder(orderId)}>Delete Order</Button>
         </div>
     </Container>
 );
