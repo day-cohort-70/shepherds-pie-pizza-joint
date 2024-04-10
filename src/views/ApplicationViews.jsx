@@ -26,6 +26,8 @@ export const ApplicationViews = () => {
     })
   }, [])
 
+  
+
     return (
         <Routes>
             <Route path="/" element={
