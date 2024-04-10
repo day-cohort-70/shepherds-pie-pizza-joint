@@ -22,7 +22,6 @@ export const deleteOrderById = async (orderId) => {
    
     const response = await fetch(`http://localhost:8088/pizzas?orderId=${orderId}`)
     const pizzas = await response.json()
-debugger
     
     for (const pizza of pizzas) {
         const toppingsResponse = await fetch(`http://localhost:8088/pizzaToppings?pizzaId=${pizza.id}`)
@@ -41,13 +40,18 @@ debugger
         });
     }
 
-  
     await fetch(`http://localhost:8088/orders/${orderId}`, {
         method: "DELETE",
     })
 
     return true
 };
+
+export const deleteOrderDelivererByOrderId = async (orderId) => {
+    await fetch(`http://localhost:8088/orderDeliverers?orderId=${orderId}`, {
+        method: "DELETE"
+    })
+}
 
 export const assignDeliverer = async (delivererObj) => {
     await fetch(`http://localhost:8088/orderDeliverers`, {
