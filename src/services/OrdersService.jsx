@@ -49,9 +49,19 @@ debugger
     return true
 };
 
-export const AssignDeliverer = (delivererObj) => {
-    fetch(`http://localhost:8088/orderDeliverers`, {
+export const assignDeliverer = async (delivererObj) => {
+    await fetch(`http://localhost:8088/orderDeliverers`, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(delivererObj)
+    })
+}
+
+export const updateDeliverer = async (delivererObj, orderDelivererId) => {
+    await fetch(`http://localhost:8088/orderDeliverers/${orderDelivererId}`, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
