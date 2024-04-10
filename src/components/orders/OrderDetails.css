@@ -9,3 +9,13 @@
     justify-content: space-around;
     margin-top: 40px;
 }
+
+.order-driverdetail {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.btn-driver {
+    margin-top: 10px;
+}

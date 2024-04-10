@@ -48,3 +48,13 @@ debugger
 
     return true
 };
+
+export const AssignDeliverer = (delivererObj) => {
+    fetch(`http://localhost:8088/orderDeliverers`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(delivererObj)
+    })
+}

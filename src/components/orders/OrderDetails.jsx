@@ -4,10 +4,9 @@ import { Card, Container, Row, Col, Button, Dropdown } from 'react-bootstrap'
 import "./OrderDetails.css"
 
 
-import { getOrderById } from "../../services/OrdersService";
+import { AssignDeliverer, getOrderById } from "../../services/OrdersService";
 import { deletePizzaById, getAllPizzaToppings, getPizzasByOrderId, getToppingsByPizzaId } from "../../services/PizzaServices";
-
-
+import { getAllOrderDeliverers } from "../../services/OrderDelivererService";
 
 
 
@@ -16,32 +15,54 @@ const { orderId } = useParams()
 const [order, setOrder] = useState({})
 const [pizzas, setPizzas] = useState([])
 const [pizzaToppings, setPizzaToppings] = useState()
-const [deliverer, setDeliverer] = useState({name: ""})
+const [delivererSelection, setDelivererSelection] = useState({name: ""})
+const [orderDeliverer, setOrderDeliverer] = useState({})
 
+//get and set orderDeliverers
+const getAndSetOrderDeliverer = () => {
+    getAllOrderDeliverers().then((delivererArr) => {
+    const matchingOrderDeliverer = delivererArr.find(orderDeliverer => orderDeliverer.orderId === parseInt(orderId))
+    matchingOrderDeliverer && ( setOrderDeliverer(matchingOrderDeliverer) )
+    }
+    )
+}
+useEffect(() => {
+    getAndSetOrderDeliverer()
+}, [order])
 
 const navigate = useNavigate()
 let pizzaCounter = 0
 
 useEffect(() => {
-
-getOrderById(orderId).then((order) => {setOrder(order)})
-getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
-getAllPizzaToppings().then((toppings) => setPizzaToppings(toppings))
-
+    
+    getOrderById(orderId).then((order) => {setOrder(order)})
+    getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
+    getAllPizzaToppings().then((toppings) => setPizzaToppings(toppings))
+    
 }, [orderId])
 
 const handleDeletePizza = (pizzaId) => {
     deletePizzaById(pizzaId).then(() => {
         getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
     })   
-  }
-const handleDelivererChange = (employee) => {setDeliverer(employee)}
+}
+const handleDelivererChange = (employee) => {setDelivererSelection(employee)}
      const calculatePizzaPrice = (pizza) => {
     // Calculate price based on size
     let price = pizza.size.price;
     // Calculate price based on number of toppings
     price += pizzaToppings?.filter((pizzaTopping) => pizzaTopping.pizzaId === pizza.id).length * 0.5; // Assuming each topping costs 50 cents
     return price;
+}
+// variable used to display the assigned driver to this order once it has been posted to the database
+
+const handleAssignDeliverer = () => {
+    const orderDelivererObj = {
+        "orderId": order.id,
+        "userId": delivererSelection.id
+    }
+    AssignDeliverer(orderDelivererObj)
+    getAndSetOrderDeliverer()
 }
 
 
@@ -58,23 +79,26 @@ return (
             ) : ( 
                 <>
                     <p className="mb-4">Service: Delivery</p>
+                    <p className="mb-4">Driver: {orderDeliverer.user?.name || "Unassigned"}</p>
                     { currentUser.isAdmin && (
-                        <>
+                        <div className="order-driverdetail">
                         <Dropdown>
-                            <Dropdown.Toggle variant="secondary" id="dropdown-basic" title={deliverer.name || "Select a Driver"}>
-                            {deliverer.name || "Select a Driver"}
+                            <Dropdown.Toggle variant="secondary" id="dropdown-basic" title={delivererSelection.name || "Select a Driver"}>
+                            {delivererSelection.name || "Select a Driver"}
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
                                 {employees.map((employee) => (
                                      <Dropdown.Item 
                                         key={employee.id}
+                                        value={employee.id}
                                         onClick={() => handleDelivererChange(employee)}
                                         >{employee.name}</Dropdown.Item>
                                 ))}
                             </Dropdown.Menu>
                         </Dropdown>
-                        </>
+                        <Button className="btn-driver"variant="success" onClick={handleAssignDeliverer}>Assign Driver</Button>
+                        </div>
                     )}
                     
                 </>
