@@ -1,7 +1,7 @@
 import { deletePizzaById } from "./PizzaServices"
 
 export const getAllOrders = () => {
-    return fetch("http://localhost:8088/orders").then(res => res.json())
+    return fetch("http://localhost:8088/orders?_embed=pizzas").then(res => res.json())
 }
 
 export const getOrderById = async (orderId) => {
@@ -18,7 +18,7 @@ export const postNewOrder = (newOrderObj) => {
     })
 }
 
-export const deleteOrderById = async (orderId) => {
+export const deleteOrderById = async (orderId, orderDeliverer) => {
    
     const response = await fetch(`http://localhost:8088/pizzas?orderId=${orderId}`)
     const pizzas = await response.json()
@@ -40,6 +40,12 @@ export const deleteOrderById = async (orderId) => {
         });
     }
 
+    if (orderDeliverer && typeof orderDeliverer === 'object' && "id" in orderDeliverer) {
+        await fetch(`http://localhost:8088/orderDeliverers/${orderDeliverer.id}`, {
+            method: "DELETE"
+        });
+    } 
+
     await fetch(`http://localhost:8088/orders/${orderId}`, {
         method: "DELETE",
     })
@@ -47,11 +53,7 @@ export const deleteOrderById = async (orderId) => {
     return true
 };
 
-export const deleteOrderDelivererByOrderId = async (orderId) => {
-    await fetch(`http://localhost:8088/orderDeliverers?orderId=${orderId}`, {
-        method: "DELETE"
-    })
-}
+
 
 export const assignDeliverer = async (delivererObj) => {
     await fetch(`http://localhost:8088/orderDeliverers`, {
@@ -70,5 +72,15 @@ export const updateDeliverer = async (delivererObj, orderDelivererId) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(delivererObj)
+    })
+}
+
+export const updateOrder = async (updatedOrder) => {
+    await fetch(`http://localhost:8088/orders/${updatedOrder.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedOrder)
     })
 }
