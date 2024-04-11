@@ -6,6 +6,7 @@ import NavBar from "../components/nav/NavBar"
 import { OrderList } from "../components/orders/OrderList"
 import { NewOrder } from "../components/orders/NewOrder"
 import { getAllUsers } from "../services/userService"
+import { SalesReport } from "../sales/SalesReport"
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({})
@@ -45,7 +46,7 @@ export const ApplicationViews = () => {
                 </Route>
                 <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
                 <Route path='/Employees' element={<h1>employye list here bruh</h1>} />
-                <Route path='/SalesReport' element={<h1>sales report here bruh</h1>} />
+                <Route path='/SalesReport' element={<SalesReport />} />
             </Route>
         </Routes>
     )

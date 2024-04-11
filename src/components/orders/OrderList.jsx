@@ -77,8 +77,18 @@ export const OrderList = () => {
 
     const handleAddTip = async (orderId) => {
         const updatedOrder = { ...orders.find(order => order.id === orderId) }
-        updatedOrder.tipAmount = tipAmounts[orderId]
-        await updateOrder(updatedOrder)
+        
+        const newOrderForPost = {
+            "userId": updatedOrder.userId,
+            "date": updatedOrder.date,
+            "tableNumber": updatedOrder.tableNumber,
+            "orderTotal": orderTotals[orderId],
+            "serviceType": updatedOrder.serviceType,
+            "id": updatedOrder.id,
+            "tipAmount": parseInt(tipAmounts[orderId])
+        }
+       
+        await updateOrder(newOrderForPost)
         getAndSetOrders()
     }
 
