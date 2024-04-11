@@ -7,6 +7,7 @@ import { OrderList } from "../components/orders/OrderList"
 import { NewOrder } from "../components/orders/NewOrder"
 import { getAllUsers } from "../services/userService"
 import { SalesReport } from "../sales/SalesReport"
+import { EmployeeList } from "../components/employees/EmployeeList"
 
 
 export const AdminViews = ({currentUser, service, setService, employees, setEmployees}) => {
@@ -29,7 +30,7 @@ export const AdminViews = ({currentUser, service, setService, employees, setEmpl
                     
                 </Route>
                 <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
-                <Route path='/Employees' element={<h1>employye list here bruh</h1>} />
+                <Route path='/Employees' element={<EmployeeList/>} />
                 <Route path='/SalesReport' element={<SalesReport />} />
             </Route>
         </Routes>
