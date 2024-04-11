@@ -36,4 +36,22 @@ export const deletePizzaById = async (pizzaId) => {
   }
   
   
-  
+  export const getAllPizzaToppingObjects = async () => {
+    return fetch(`http://localhost:8088/pizzaToppings`).then((res) => res.json())
+  }
+
+  export const getAllSizes = async () => {
+    return fetch(`http://localhost:8088/sizes`).then((res) => res.json())
+  }
+
+  export const getAllCheeses = async () => {
+    return fetch(`http://localhost:8088/cheeses`).then((res) => res.json())
+  }
+
+  export const getAllSauces= async () => {
+    return fetch(`http://localhost:8088/sauces`).then((res) => res.json())
+  }
+
+  export const getAllToppings = async () => {
+    return fetch(`http://localhost:8088/toppings`).then((res) => res.json())
+  }
