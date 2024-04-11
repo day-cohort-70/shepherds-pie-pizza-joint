@@ -1,34 +1,31 @@
-{
-  /* The following line can be included in your src/index.js or App.js file */
-}
+import { Outlet, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Component, useState } from "react";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import { Button } from "react-bootstrap";
 
-import { Pizzas } from "./components/pizzas/Pizzas.jsx";
+import React, { useEffect, useState } from "react";
 
-function App() {
+import { Login } from "./components/auth/Login";
+import { Register } from "./components/auth/Register";
+import { Authorized } from "./views/Authorized";
+import { ApplicationViews } from "./views/ApplicationViews";
+
+export const App = () => {
   return (
     <>
-      <Navbar bg="dark" data-bs-theme="dark">
-        <Container>
-          <Navbar.Brand href="#home">Pizza Joint</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#orders">Order List</Nav.Link>
-            <Nav.Link href="#new-order">New Orders</Nav.Link>
-            <Nav.Link href="#employees">Employees</Nav.Link>
-            <Nav.Link href="#sales">Sales Report</Nav.Link>
-            <Nav.Link href="#logout">Logout</Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
-      <br />
-      {<Pizzas />}
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route
+          path="*"
+          element={
+            <Authorized>
+              <ApplicationViews />
+            </Authorized>
+          }
+        />
+      </Routes>
     </>
   );
-}
+};
 
 export default App;
