@@ -82,7 +82,7 @@ export const OrderList = () => {
             "userId": updatedOrder.userId,
             "date": updatedOrder.date,
             "tableNumber": updatedOrder.tableNumber,
-            "orderTotal": orderTotals[orderId],
+            "orderTotal": updatedOrder.orderTotal - updatedOrder.tipAmount + parseInt(tipAmounts[orderId]),
             "serviceType": updatedOrder.serviceType,
             "id": updatedOrder.id,
             "tipAmount": parseInt(tipAmounts[orderId])
