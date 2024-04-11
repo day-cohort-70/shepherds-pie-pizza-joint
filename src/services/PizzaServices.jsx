@@ -25,7 +25,7 @@ export const deletePizzaById = async (pizzaId) => {
   const pizzaToppingsToDelete = allPizzaToppings.filter(
     (topping) => topping.pizzaId === pizzaId
   );
-  debugger;
+ 
   // delete each topping obj 1 by 1
   await pizzaToppingsToDelete.map(async (topping) => {
     await fetch(`http://localhost:8088/pizzaToppings/${topping.id}`, {

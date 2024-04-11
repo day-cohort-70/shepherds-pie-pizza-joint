@@ -26,7 +26,7 @@ export const AdminViews = ({currentUser, service, setService, employees, setEmpl
                 <Route path='/orderList' >
                     <Route index element={<OrderList currentUser={currentUser} />}/>
                     <Route path=':orderId' element={<OrderDetails currentUser={currentUser} service={service} employees={employees}/>} />
-                    <Route path=':orderId/:pizzaId' element={<>yuh</> } />
+                    <Route path=':orderId/:pizzaId' element={<Pizzas /> } />
                 </Route>
                 <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
                 <Route path='/Employees' element={<h1>employye list here bruh</h1>} />
