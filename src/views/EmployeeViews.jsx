@@ -30,8 +30,7 @@ export const EmployeeViews = ({currentUser, service, setService, employees, setE
                         
                     </Route>
                     <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
-                    <Route path='/Employees' element={<h1>employye list here bruh</h1>} />
-                    <Route path='/SalesReport' element={<SalesReport />} />
+
                 </Route>
             </Routes>
         )
