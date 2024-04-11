@@ -7,6 +7,8 @@ import { OrderList } from "../components/orders/OrderList"
 import { NewOrder } from "../components/orders/NewOrder"
 import { getAllUsers } from "../services/userService"
 import { SalesReport } from "../sales/SalesReport"
+import { EmployeeViews } from "./EmployeeViews"
+import { AdminViews } from "./AdminViews"
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({})
@@ -29,25 +31,7 @@ export const ApplicationViews = () => {
 
   
 
-    return (
-        <Routes>
-            <Route path="/" element={
-                <>
-                    <NavBar currentUser={currentUser} />
-                    <Outlet />
-                </>
-            }>
-                <Route index element={<h1>yuh</h1>} />
-             
-                <Route path='/orderList' >
-                    <Route index element={<OrderList currentUser={currentUser} />}/>
-                    <Route path=':orderId' element={<OrderDetails currentUser={currentUser} service={service} employees={employees}/>} />
-                    
-                </Route>
-                <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
-                <Route path='/Employees' element={<h1>employye list here bruh</h1>} />
-                <Route path='/SalesReport' element={<SalesReport />} />
-            </Route>
-        </Routes>
-    )
+    return currentUser.isAdmin ? <AdminViews currentUser={currentUser} service={service} setService={setService} employees={employees} setEmployees={setEmployees} 
+    /> : 
+    <EmployeeViews currentUser={currentUser} service={service} setService={setService} employees={employees} setEmployees={setEmployees} />
 }
