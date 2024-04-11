@@ -40,6 +40,7 @@ export const Pizzas = () => {
           <PizzaToppings
             pizzaOptions={pizzaOptions}
             setPizzaOptions={setPizzaOptions}
+            pizzaId={pizzaId}
           />
           <div></div>
         </div>

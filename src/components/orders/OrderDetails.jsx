@@ -84,9 +84,9 @@ const handleDeleteOrder = async (orderId) => {
 const handleAddPizza = () => {
     const newPizzaObj = {
         orderId: parseInt(orderId),
-        sizeId: 0, 
-        cheeseId: 0,
-        sauceId: 0
+        sizeId: 1, 
+        cheeseId: 1,
+        sauceId: 1
     };
     createNewPizza(newPizzaObj)
     .then((res) => {

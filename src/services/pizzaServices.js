@@ -17,7 +17,7 @@ export const getPizzaToppings = () => {
 
 export const savePizza = (pizzaId, pizzaOptions) => {
     return fetch(`http://localhost:8088/pizzas/${pizzaId}`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
