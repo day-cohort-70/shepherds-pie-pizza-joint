@@ -93,7 +93,7 @@ export const OrderList = () => {
     }
 
     const calculatePizzaPrice = async (pizza) => {
-        let price = pizza.size.price
+        let price = pizza.size?.price
         const pizzaToppings = await toppings?.filter((topping) => topping.pizzaId === pizza.id)
         if (pizzaToppings) {
             price += pizzaToppings.length * 0.5 
@@ -126,6 +126,19 @@ export const OrderList = () => {
         totalPrice += parseInt(order.tipAmount)
     
         return totalPrice
+    }
+    const handleAddPizza = () => {
+        const newPizzaObj = {
+            orderId: orderId,
+            sizeId: 0,
+            cheeseId: 0,
+            sauceId: 0
+        }
+    
+        createNewPizza(newPizzaObj)
+            .then((newPizza) => {
+                navigate(`/orderList/${orderId}/${newPizza.id}`)
+            })
     }
     
 
