@@ -20,8 +20,9 @@ const NavBar = ({ currentUser}) => {
         <Nav className="mr-auto">
           <Nav.Link as={Link} to="/orderList" className="nav-link">Order List</Nav.Link>
           <Nav.Link as={Link} to="/newOrder" className="nav-link">New Order</Nav.Link>
+          {currentUser?.isAdmin && <>
           <Nav.Link as={Link} to="/employees" className="nav-link">Employees</Nav.Link>
-          <Nav.Link as={Link} to="/salesReport" className="nav-link">Sales Report</Nav.Link>
+          <Nav.Link as={Link} to="/salesReport" className="nav-link">Sales Report</Nav.Link></>}
           <Nav.Link as={Link} to="/" onClick={() => {
             localStorage.removeItem("pizza_user")
             navigate("/", { replace: true })

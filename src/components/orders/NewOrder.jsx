@@ -46,8 +46,8 @@ useEffect(() => {
         <>
         <h1>New Order</h1>
         <Dropdown className="dropdown-main">
-          <Dropdown.Toggle variant="warning" id="dropdown-basic" title={service.type || "Select an Option"}>
-          {service.type || "Select an Option"}
+          <Dropdown.Toggle variant="warning" id="dropdown-basic" title={service?.type || "Select an Option"}>
+          {service?.type || "Select an Option"}
           </Dropdown.Toggle>
     
           <Dropdown.Menu>
@@ -61,7 +61,7 @@ useEffect(() => {
           </Dropdown.Menu>
         </Dropdown>
 
-        {service.type === "Dine-In" && (
+        {service?.type === "Dine-In" && (
         <>
             <Dropdown className="dropdown-main">
                 <Dropdown.Toggle variant="warning" id="dropdown-basic-tables" title={service.table || "Select a Table"}>
