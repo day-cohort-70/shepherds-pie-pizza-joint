@@ -9,53 +9,29 @@ import { getAllUsers } from "../services/userService";
 import { SalesReport } from "../sales/SalesReport";
 import { Pizzas } from "../components/pizzas/Pizzas.jsx";
 
-export const AdminViews = ({
-  currentUser,
-  service,
-  setService,
-  employees,
-  setEmployees,
-}) => {
-  return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-            <NavBar currentUser={currentUser} />
-            <Outlet />
-          </>
-        }
-      >
-        <Route index element={<h1>yuh</h1>} />
+export const AdminViews = ({currentUser, service, setService, employees, setEmployees}) => {
 
-        <Route path="/orderList">
-          <Route index element={<OrderList currentUser={currentUser} />} />
-          <Route
-            path=":orderId"
-            element={
-              <OrderDetails
-                currentUser={currentUser}
-                service={service}
-                employees={employees}
-              />
-            }
-          />
-          <Route path=":orderId/:pizzaId" element={<Pizzas />} />
-        </Route>
-        <Route
-          path="/NewOrder"
-          element={
-            <NewOrder
-              service={service}
-              setService={setService}
-              currentUser={currentUser}
-            />
-          }
-        />
-        <Route path="/Employees" element={<h1>employye list here bruh</h1>} />
-        <Route path="/SalesReport" element={<SalesReport />} />
-      </Route>
-    </Routes>
-  );
-};
+
+
+    return (
+        <Routes>
+            <Route path="/" element={
+                <>
+                    <NavBar currentUser={currentUser} />
+                    <Outlet />
+                </>
+            }>
+                <Route index element={<h1>yuh</h1>} />
+             
+                <Route path='/orderList' >
+                    <Route index element={<OrderList currentUser={currentUser} />}/>
+                    <Route path=':orderId' element={<OrderDetails currentUser={currentUser} service={service} employees={employees}/>} />
+                    <Route path=':orderId/:pizzaId' element={<>yuh</> } />
+                </Route>
+                <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
+                <Route path='/Employees' element={<h1>employye list here bruh</h1>} />
+                <Route path='/SalesReport' element={<SalesReport />} />
+            </Route>
+        </Routes>
+    )
+}

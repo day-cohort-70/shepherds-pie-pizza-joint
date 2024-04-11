@@ -57,16 +57,16 @@ export const getAllSauces = async () => {
   return fetch(`http://localhost:8088/sauces`).then((res) => res.json());
 };
 
-export const getAllToppings = async () => {
-  return fetch(`http://localhost:8088/toppings`).then((res) => res.json());
-};
+  export const getAllToppings = async () => {
+    return fetch(`http://localhost:8088/toppings`).then((res) => res.json())
+  }
 
-export const createNewPizza = async (pizzaObj) => {
-  await fetch(`http://localhost:8088/pizzas`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(pizzaObj),
-  });
-};
+  export const createNewPizza = async (pizzaObj) => {
+    return fetch(`http://localhost:8088/pizzas`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pizzaObj)
+    });
+}

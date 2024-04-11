@@ -3,19 +3,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Card, Container, Row, Col, Button, Dropdown } from "react-bootstrap";
 import "./OrderDetails.css";
 
-import {
-  assignDeliverer,
-  deleteOrderById,
-  getOrderById,
-  updateDeliverer,
-} from "../../services/OrdersService";
-import {
-  createNewPizza,
-  deletePizzaById,
-  getAllPizzaToppings,
-  getPizzasByOrderId,
-  getToppingsByPizzaId,
-} from "../../services/PizzaServices";
+import { assignDeliverer, deleteOrderById, getOrderById, updateDeliverer } from "../../services/OrdersService";
+import { createNewPizza, deletePizzaById, getAllPizzaToppings, getPizzasByOrderId, getToppingsByPizzaId } from "../../services/PizzaServices";
 import { getAllOrderDeliverers } from "../../services/OrderDelivererService";
 
 export const OrderDetails = ({ currentUser, service, employees }) => {
@@ -54,15 +43,12 @@ export const OrderDetails = ({ currentUser, service, employees }) => {
 
   const handleDeletePizza = (pizzaId) => {
     deletePizzaById(pizzaId).then(() => {
-      getPizzasByOrderId(orderId).then((pizzaObjs) => {
-        setPizzas(pizzaObjs);
-      });
-    });
-  };
-  const handleDelivererChange = (employee) => {
-    setDelivererSelection(employee);
-  };
-  const calculatePizzaPrice = (pizza) => {
+        getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
+    })   
+}
+const handleDelivererChange = (employee) => {setDelivererSelection(employee)}
+     const calculatePizzaPrice = (pizza) => {
+        if (pizza.size) {
     // Calculate price based on size
     let price = pizza.size.price;
     // Calculate price based on number of toppings
@@ -70,8 +56,8 @@ export const OrderDetails = ({ currentUser, service, employees }) => {
       pizzaToppings?.filter((pizzaTopping) => pizzaTopping.pizzaId === pizza.id)
         .length * 0.5; // Assuming each topping costs 50 cents
     return price;
-  };
-  // variable used to display the assigned driver to this order once it has been posted to the database
+}}
+// variable used to display the assigned driver to this order once it has been posted to the database
 
   const handleAssignDeliverer = async () => {
     const orderDelivererObj = {
@@ -90,25 +76,34 @@ export const OrderDetails = ({ currentUser, service, employees }) => {
     }
   };
 
-  const handleDeleteOrder = async (orderId) => {
-    await deleteOrderById(orderId, orderDeliverer);
-    navigate("/orderList");
-  };
+const handleDeleteOrder = async (orderId) => {
+    await deleteOrderById(orderId, orderDeliverer) 
+    navigate('/orderList')
+}
 
-  const handleAddPizza = async () => {
+const handleAddPizza = () => {
     const newPizzaObj = {
-      orderId: parseInt(orderId),
-      sizeId: 1,
-      cheeseId: 0,
-      sauceId: 0,
+        orderId: parseInt(orderId),
+        sizeId: 0, 
+        cheeseId: 0,
+        sauceId: 0
     };
-    await createNewPizza(newPizzaObj).then((newPizza) => {
-      newPizza.json();
-      if (newPizza && newPizza.id) {
-        navigate(`/orderList/${orderId}/${newPizza.id}`);
-      }
-    });
-  };
+    createNewPizza(newPizzaObj)
+    .then((res) => {
+     
+       return res.json();
+    })
+    .then((res) => {
+  
+       const newPizzaId = res.id;
+       console.log('New Pizza ID:', newPizzaId);
+       navigate(`/orderList/${orderId}/${newPizzaId}`);
+    })
+  
+}
+        
+
+
 
   return (
     <Container className="mt-5">
@@ -137,85 +132,53 @@ export const OrderDetails = ({ currentUser, service, employees }) => {
                     {delivererSelection.name || "Select a Driver"}
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu>
-                    {employees.map((employee) => (
-                      <Dropdown.Item
-                        key={employee.id}
-                        value={employee.id}
-                        onClick={() => handleDelivererChange(employee)}
-                      >
-                        {employee.name}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-                <Button
-                  className="btn-driver"
-                  variant="success"
-                  onClick={handleAssignDeliverer}
-                >
-                  Assign Driver
-                </Button>
-              </div>
+                            <Dropdown.Menu>
+                                {employees.map((employee) => (
+                                     <Dropdown.Item 
+                                        key={employee.id}
+                                        value={employee.id}
+                                        onClick={() => handleDelivererChange(employee)}
+                                        >{employee.name}</Dropdown.Item>
+                                ))}
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Button className="btn-driver"variant="success" onClick={handleAssignDeliverer}>Assign Driver</Button>
+                        </div>
+                    )}
+                    
+                </>
             )}
-          </>
-        )}
-      </div>
-      <div className="orders">
-        {pizzas.map((pizza) => (
-          <div key={pizza.id} className="order mb-4">
+        </div>
+        <div className="orders">
+    {pizzas && pizzas.map((pizza) => (
+        <div key={pizza.id} className="order mb-4">
             <header className="order-header">Pizza #{++pizzaCounter}</header>
-            <div className="order-details">Size: {pizza.size.size}</div>
-            <div className="order-details">Sauce: {pizza.sauce.type}</div>
-            <div className="order-details">Cheese: {pizza.cheese.type}</div>
-            <div className="order-details">
-              Toppings:
-              <ul>
-                {pizzaToppings &&
-                  pizzaToppings
-                    .filter((pizzaTopping) => pizzaTopping.pizzaId === pizza.id)
-                    .map((pizzaTopping) => (
-                      <li key={pizzaTopping.id}>{pizzaTopping.topping.type}</li>
+            <div className="order-details">Size: {pizza.size?.size}</div>
+            <div className="order-details">Sauce: {pizza.sauce?.type}</div>
+            <div className="order-details">Cheese: {pizza.cheese?.type}</div>
+            <div className="order-details">Toppings:
+                <ul>
+                    {pizzaToppings && pizzaToppings
+                        .filter((pizzaTopping) => pizzaTopping.pizzaId === pizza.id)
+                        .map((pizzaTopping) => (
+                            <li key={pizzaTopping.id}>{pizzaTopping.topping.type}</li>
                     ))}
-              </ul>
+                </ul>
             </div>
-            <div className="order-details">
-              Price: ${calculatePizzaPrice(pizza).toFixed(2)}
-            </div>
+            <div className="order-details">Price: ${calculatePizzaPrice(pizza)}</div>
             <div className="orderlist-btns">
-              <Button variant="warning" className="btn-info">
-                Edit
-              </Button>
-              <Button
-                variant="danger"
-                className="btn-info"
-                onClick={() => handleDeletePizza(pizza.id)}
-              >
-                Delete
-              </Button>
+                <Button variant="warning" className="btn-info">Edit</Button>
+                <Button variant="danger" className="btn-info" onClick={() => handleDeletePizza(pizza.id)}>Delete</Button>
             </div>
-          </div>
-        ))}
-      </div>
-      <div className="btn-bar">
-        <Button variant="warning" size="lg" onClick={handleAddPizza}>
-          Add Pizza
-        </Button>
-        <Button
-          variant="warning"
-          size="lg"
-          onClick={() => navigate("/orderList")}
-        >
-          Order List
-        </Button>
-        <Button
-          variant="danger"
-          size="lg"
-          onClick={() => handleDeleteOrder(orderId)}
-        >
-          Delete Order
-        </Button>
-      </div>
+        </div>
+    ))}
+</div>
+<div className="btn-bar">
+    <Button variant="warning" size="lg" onClick={handleAddPizza}>Add Pizza</Button>
+    <Button variant="warning" size="lg" onClick={() => navigate('/orderList')}>Order List</Button>
+    <Button variant="danger" size="lg" onClick={() => handleDeleteOrder(orderId)}>Delete Order</Button>
+</div>
+
     </Container>
   );
 };
