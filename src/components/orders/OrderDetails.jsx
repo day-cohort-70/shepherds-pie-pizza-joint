@@ -4,7 +4,7 @@ import { Card, Container, Row, Col, Button, Dropdown } from 'react-bootstrap'
 import "./OrderDetails.css"
 
 
-import { assignDeliverer, deleteOrderById, deleteOrderDelivererByOrderId, getOrderById, updateDeliverer } from "../../services/OrdersService";
+import { assignDeliverer, deleteOrderById, getOrderById, updateDeliverer } from "../../services/OrdersService";
 import { deletePizzaById, getAllPizzaToppings, getPizzasByOrderId, getToppingsByPizzaId } from "../../services/PizzaServices";
 import { getAllOrderDeliverers } from "../../services/OrderDelivererService";
 
@@ -72,11 +72,7 @@ const handleAssignDeliverer = async () => {
 };
 
 const handleDeleteOrder = async (orderId) => {
-    await deleteOrderById(orderId)
-
-    if (Object.keys(orderDeliverer).length !== 0) {
-        await (deleteOrderDelivererByOrderId(orderId))
-    } 
+    await deleteOrderById(orderId, orderDeliverer) 
     navigate('/orderList')
 }
 
