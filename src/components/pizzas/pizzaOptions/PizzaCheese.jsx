@@ -23,7 +23,7 @@ export const PizzaCheese = ({ pizzaOptions, setPizzaOptions }) => {
         <Form
           onChange={(event) => {
             const pizzaOptionsCopy = { ...pizzaOptions };
-            pizzaOptionsCopy.cheese = event.target.value;
+            pizzaOptionsCopy.cheese = parseInt(event.target.value);
             setPizzaOptions(pizzaOptionsCopy);
           }}
         >

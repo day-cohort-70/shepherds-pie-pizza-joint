@@ -12,7 +12,7 @@ import { savePizza } from "../../services/pizzaServices.js";
 
 export const Pizzas = () => {
   const [pizzaOptions, setPizzaOptions] = useState({});
-  const { pizzaId } = useParams;
+  const { pizzaId } = useParams();
   const testPizzaId = 1;
 
   useEffect(() => {}, []);

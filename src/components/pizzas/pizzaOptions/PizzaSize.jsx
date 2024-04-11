@@ -23,7 +23,7 @@ export const PizzaSize = ({ pizzaOptions, setPizzaOptions }) => {
         <Form
           onChange={(event) => {
             const pizzaOptionsCopy = { ...pizzaOptions };
-            pizzaOptionsCopy.size = event.target.value;
+            pizzaOptionsCopy.size = parseInt(event.target.value);
             setPizzaOptions(pizzaOptionsCopy);
           }}
         >

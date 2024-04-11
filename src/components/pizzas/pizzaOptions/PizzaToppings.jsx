@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 export const PizzaToppings = ({ pizzaOptions, setPizzaOptions }) => {
   const [pizzaToppings, setPizzaToppings] = useState([]);
   //to add one topping at a time to pizza
-  const [addPizzaTopping, setAddPizzaTopping] = useState("");
+  const [addPizzaToppings, setAddPizzaToppings] = useState("");
   const { pizzaId } = useParams();
   const testPizzaID = 1;
 
@@ -31,7 +31,7 @@ export const PizzaToppings = ({ pizzaOptions, setPizzaOptions }) => {
           onChange={(event) => {
             //get topping selection
             console.log(event.target.value);
-            setAddPizzaTopping(event.target.value);
+            setAddPizzaToppings(parseInt(event.target.value));
           }}
         >
           {pizzaToppings.map((pizzaToppingObj) => {
@@ -54,8 +54,8 @@ export const PizzaToppings = ({ pizzaOptions, setPizzaOptions }) => {
               variant="primary"
               size="sm"
               onClick={() => {
-                console.log(addPizzaTopping);
-                selectPizzaTopping(testPizzaID, addPizzaTopping);
+                console.log(addPizzaToppings);
+                selectPizzaTopping(testPizzaID, addPizzaToppings);
               }}
             >
               Add Topping

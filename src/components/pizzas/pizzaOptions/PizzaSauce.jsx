@@ -23,7 +23,7 @@ export const PizzaSauce = ({ pizzaOptions, setPizzaOptions }) => {
           onChange={(event) => {
             console.log(event);
             const pizzaOptionsCopy = { ...pizzaOptions };
-            pizzaOptionsCopy.sauce = event.target.value;
+            pizzaOptionsCopy.sauce = parseInt(event.target.value);
             setPizzaOptions(pizzaOptionsCopy);
           }}
         >

@@ -32,7 +32,7 @@ export const savePizza = (pizzaId, pizzaOptions) => {
 
 
 
-export const selectPizzaTopping = (pizzaId, addPizzaTopping) => {
+export const selectPizzaTopping = (pizzaId, addPizzaToppings) => {
     return fetch("http://localhost:8088/pizzaToppings", {
       method: "POST",
       headers: {
@@ -40,7 +40,7 @@ export const selectPizzaTopping = (pizzaId, addPizzaTopping) => {
       },
       body: JSON.stringify({
         pizzaId: pizzaId,
-        toppingId: addPizzaTopping
+        toppingId: addPizzaToppings
       }),
     }).then((res) => res.json())
 
