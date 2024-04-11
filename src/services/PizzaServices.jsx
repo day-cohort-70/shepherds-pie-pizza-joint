@@ -19,7 +19,6 @@ export const deletePizzaById = async (pizzaId) => {
   
     // filtertoppings by pizzID
     const pizzaToppingsToDelete = allPizzaToppings.filter(topping => topping.pizzaId === pizzaId)
-  debugger
     // delete each topping obj 1 by 1
     await pizzaToppingsToDelete.map(async (topping) => {
       await fetch(`http://localhost:8088/pizzaToppings/${topping.id}`, {
@@ -55,3 +54,13 @@ export const deletePizzaById = async (pizzaId) => {
   export const getAllToppings = async () => {
     return fetch(`http://localhost:8088/toppings`).then((res) => res.json())
   }
+
+  export const createNewPizza = async (pizzaObj) => {
+    return fetch(`http://localhost:8088/pizzas`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pizzaObj)
+    });
+}

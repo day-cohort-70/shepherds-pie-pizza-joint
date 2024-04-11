@@ -1,21 +1,26 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getAllUsers } from "../../services/userService"
+import { Button, Card } from "react-bootstrap"
 
 export const EmployeeList = () => {
 
     const [allEmployees, setAllEmployees] = useState([])
     
-    getAndSetAllEmployees = () => {
+    const getAndSetAllEmployees = () => {
         getAllUsers().then((userArr) => {
             setAllEmployees(userArr)
         })
     }
+
+    useEffect(() => {
+        getAndSetAllEmployees()
+    }, [])
     
     return (
         <div className="employees-container">
             <h1>Employees</h1>
             <div className="employee">
-                {employees.map((employee) => {
+                {allEmployees.map((employee) => {
                         <Card style={{ width: '18rem' }}>
                         <Card.Img variant="top" src="holder.js/100px180" />
                         <Card.Body>
