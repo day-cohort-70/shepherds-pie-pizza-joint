@@ -1,47 +1,47 @@
-import React, { useEffect, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
-import { Card, Container, Row, Col, Button, Dropdown } from 'react-bootstrap'
-import "./OrderDetails.css"
-
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Card, Container, Row, Col, Button, Dropdown } from "react-bootstrap";
+import "./OrderDetails.css";
 
 import { assignDeliverer, deleteOrderById, getOrderById, updateDeliverer } from "../../services/OrdersService";
 import { createNewPizza, deletePizzaById, getAllPizzaToppings, getPizzasByOrderId, getToppingsByPizzaId } from "../../services/PizzaServices";
 import { getAllOrderDeliverers } from "../../services/OrderDelivererService";
 
+export const OrderDetails = ({ currentUser, service, employees }) => {
+  const { orderId } = useParams();
+  const [order, setOrder] = useState({});
+  const [pizzas, setPizzas] = useState([]);
+  const [pizzaToppings, setPizzaToppings] = useState();
+  const [delivererSelection, setDelivererSelection] = useState({ name: "" });
+  const [orderDeliverer, setOrderDeliverer] = useState({});
+  const navigate = useNavigate();
 
-
-export const OrderDetails = ({currentUser, service, employees}) => {
-const { orderId } = useParams()
-const [order, setOrder] = useState({})
-const [pizzas, setPizzas] = useState([])
-const [pizzaToppings, setPizzaToppings] = useState()
-const [delivererSelection, setDelivererSelection] = useState({name: ""})
-const [orderDeliverer, setOrderDeliverer] = useState({})
-const navigate = useNavigate()
-
-//get and set orderDeliverers
-const getAndSetOrderDeliverer = () => {
+  //get and set orderDeliverers
+  const getAndSetOrderDeliverer = () => {
     getAllOrderDeliverers().then((delivererArr) => {
-    const matchingOrderDeliverer = delivererArr.find(orderDeliverer => orderDeliverer.orderId === parseInt(orderId))
-    matchingOrderDeliverer && ( setOrderDeliverer(matchingOrderDeliverer) )
-    }
-    )
-}
-useEffect(() => {
-    getAndSetOrderDeliverer()
-}, [order])
+      const matchingOrderDeliverer = delivererArr.find(
+        (orderDeliverer) => orderDeliverer.orderId === parseInt(orderId)
+      );
+      matchingOrderDeliverer && setOrderDeliverer(matchingOrderDeliverer);
+    });
+  };
+  useEffect(() => {
+    getAndSetOrderDeliverer();
+  }, [order]);
 
-let pizzaCounter = 0
+  let pizzaCounter = 0;
 
-useEffect(() => {
-    
-    getOrderById(orderId).then((order) => {setOrder(order)})
-    getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
-    getAllPizzaToppings().then((toppings) => setPizzaToppings(toppings))
-    
-}, [orderId])
+  useEffect(() => {
+    getOrderById(orderId).then((order) => {
+      setOrder(order);
+    });
+    getPizzasByOrderId(orderId).then((pizzaObjs) => {
+      setPizzas(pizzaObjs);
+    });
+    getAllPizzaToppings().then((toppings) => setPizzaToppings(toppings));
+  }, [orderId]);
 
-const handleDeletePizza = (pizzaId) => {
+  const handleDeletePizza = (pizzaId) => {
     deletePizzaById(pizzaId).then(() => {
         getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
     })   
@@ -52,28 +52,29 @@ const handleDelivererChange = (employee) => {setDelivererSelection(employee)}
     // Calculate price based on size
     let price = pizza.size.price;
     // Calculate price based on number of toppings
-    price += pizzaToppings?.filter((pizzaTopping) => pizzaTopping.pizzaId === pizza.id).length * 0.5; // Assuming each topping costs 50 cents
+    price +=
+      pizzaToppings?.filter((pizzaTopping) => pizzaTopping.pizzaId === pizza.id)
+        .length * 0.5; // Assuming each topping costs 50 cents
     return price;
 }}
 // variable used to display the assigned driver to this order once it has been posted to the database
 
-const handleAssignDeliverer = async () => {
+  const handleAssignDeliverer = async () => {
     const orderDelivererObj = {
-        "orderId": order.id,
-        "userId": delivererSelection.id
+      orderId: order.id,
+      userId: delivererSelection.id,
     };
     if (delivererSelection.name === "") {
-        window.alert("please select a driver")
+      window.alert("please select a driver");
     } else {
-     if (Object.keys(orderDeliverer).length === 0) {
-         await assignDeliverer(orderDelivererObj)
-         
-     } else {
-         await updateDeliverer(orderDelivererObj, orderDeliverer.id)
-     }
-     getAndSetOrderDeliverer()
- }
-};
+      if (Object.keys(orderDeliverer).length === 0) {
+        await assignDeliverer(orderDelivererObj);
+      } else {
+        await updateDeliverer(orderDelivererObj, orderDeliverer.id);
+      }
+      getAndSetOrderDeliverer();
+    }
+  };
 
 const handleDeleteOrder = async (orderId) => {
     await deleteOrderById(orderId, orderDeliverer) 
@@ -104,26 +105,32 @@ const handleAddPizza = () => {
 
 
 
-return (
+  return (
     <Container className="mt-5">
-        <h2 className="mb-4">Order Details</h2>
-        <div className="header-orderdetail">
-            <p className="mb-4">Order ID: {orderId}</p>
-            {order && order.serviceType === "Dine-In" ? (
-                <>
-                    <p className="mb-4">Service: Dine-In</p> 
-                    <p className="mb-4">Table: {order.tableNumber}</p> 
-                </>
-            ) : ( 
-                <>
-                    <p className="mb-4">Service: Delivery</p>
-                    <p className="mb-4">Driver: {orderDeliverer.user?.name || "Unassigned"}</p>
-                    { currentUser.isAdmin && (
-                        <div className="order-driverdetail">
-                        <Dropdown>
-                            <Dropdown.Toggle variant="secondary" id="dropdown-basic" title={delivererSelection.name || "Select a Driver"}>
-                            {delivererSelection.name || "Select a Driver"}
-                            </Dropdown.Toggle>
+      <h2 className="mb-4">Order Details</h2>
+      <div className="header-orderdetail">
+        <p className="mb-4">Order ID: {orderId}</p>
+        {order && order.serviceType === "Dine-In" ? (
+          <>
+            <p className="mb-4">Service: Dine-In</p>
+            <p className="mb-4">Table: {order.tableNumber}</p>
+          </>
+        ) : (
+          <>
+            <p className="mb-4">Service: Delivery</p>
+            <p className="mb-4">
+              Driver: {orderDeliverer.user?.name || "Unassigned"}
+            </p>
+            {currentUser.isAdmin && (
+              <div className="order-driverdetail">
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant="secondary"
+                    id="dropdown-basic"
+                    title={delivererSelection.name || "Select a Driver"}
+                  >
+                    {delivererSelection.name || "Select a Driver"}
+                  </Dropdown.Toggle>
 
                             <Dropdown.Menu>
                                 {employees.map((employee) => (
@@ -173,6 +180,5 @@ return (
 </div>
 
     </Container>
-);
-;
-}
+  );
+};
