@@ -61,14 +61,17 @@ const handleAssignDeliverer = async () => {
         "orderId": order.id,
         "userId": delivererSelection.id
     };
-    if (Object.keys(orderDeliverer).length === 0) {
-        await assignDeliverer(orderDelivererObj)
-        
+    if (delivererSelection.name === "") {
+        window.alert("please select a driver")
     } else {
-        await updateDeliverer(orderDelivererObj, orderDeliverer.id)
-    }
-    getAndSetOrderDeliverer()
-  
+     if (Object.keys(orderDeliverer).length === 0) {
+         await assignDeliverer(orderDelivererObj)
+         
+     } else {
+         await updateDeliverer(orderDelivererObj, orderDeliverer.id)
+     }
+     getAndSetOrderDeliverer()
+ }
 };
 
 const handleDeleteOrder = async (orderId) => {
