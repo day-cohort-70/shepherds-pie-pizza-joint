@@ -9,6 +9,7 @@ import { getAllUsers } from "../services/userService";
 import { SalesReport } from "../sales/SalesReport";
 import { Pizzas } from "../components/pizzas/Pizzas.jsx";
 import { EmployeeList } from "../components/employees/EmployeeList"
+import { EmployeeDetail } from "../components/employees/EmployeeDetail.jsx";
 
 
 export const AdminViews = ({currentUser, service, setService, employees, setEmployees}) => {
@@ -31,7 +32,10 @@ export const AdminViews = ({currentUser, service, setService, employees, setEmpl
                     <Route path=':orderId/:pizzaId' element={<Pizzas /> } />
                 </Route>
                 <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
-                <Route path='/Employees' element={<EmployeeList/>} />
+                <Route path='/employees' >
+                    <Route index element={<EmployeeList/>}/>
+                    <Route path=':employeeId' element={<EmployeeDetail/>}/>
+                </Route>
                 <Route path='/SalesReport' element={<SalesReport />} />
             </Route>
         </Routes>

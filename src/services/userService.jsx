@@ -21,3 +21,7 @@ export const getUserByEmail = (email) => {
       body: JSON.stringify(customer),
     }).then((res) => res.json())
   }
+
+  export const getEmployeeById = (employeeId) => {
+    return fetch(`http://localhost:8088/users/${employeeId}`).then(res => res.json())
+  }

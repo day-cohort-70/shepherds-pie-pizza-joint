@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import { getAllUsers } from "../../services/userService"
 import { Button, Card } from "react-bootstrap"
+import "./Employees.css"
+import { useNavigate } from "react-router-dom"
 
 export const EmployeeList = () => {
-
+const navigate = useNavigate()
     const [allEmployees, setAllEmployees] = useState([])
     
     const getAndSetAllEmployees = () => {
@@ -15,24 +17,24 @@ export const EmployeeList = () => {
     useEffect(() => {
         getAndSetAllEmployees()
     }, [])
-    
+
+
+
     return (
         <div className="employees-container">
             <h1>Employees</h1>
             <div className="employee">
-                {allEmployees.map((employee) => {
-                        <Card style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src="holder.js/100px180" />
+                {allEmployees.map((employee) => (
+                        <Card key={employee.id} style={{ width: '80%' }}>
                         <Card.Body>
-                          <Card.Title>${employee.name}</Card.Title>
+                          <Card.Title>{employee.name}</Card.Title>
                           <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
+                            Phone Number: {employee.phoneNumber}
                           </Card.Text>
-                          <Button variant="primary">Go somewhere</Button>
+                          <Button variant="primary" onClick={() => navigate(`/employees/${employee.id}`)}>View/Edit Employee Details</Button>
                         </Card.Body>
                       </Card>
-                })}
+            ))}
             </div>
         </div>
     )
