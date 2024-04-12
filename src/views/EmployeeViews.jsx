@@ -7,6 +7,7 @@ import { OrderList } from "../components/orders/OrderList"
 import { NewOrder } from "../components/orders/NewOrder"
 import { getAllUsers } from "../services/userService"
 import { SalesReport } from "../sales/SalesReport"
+import { Pizzas } from "../components/pizzas/Pizzas"
 
 
 
@@ -14,24 +15,24 @@ import { SalesReport } from "../sales/SalesReport"
 
 export const EmployeeViews = ({currentUser, service, setService, employees, setEmployees}) => {
  
-        return (
-            <Routes>
-                <Route path="/" element={
-                    <>
-                        <NavBar currentUser={currentUser} />
-                        <Outlet />
-                    </>
-                }>
-                    <Route index element={<h1>yuh</h1>} />
-                 
-                    <Route path='/orderList' >
-                        <Route index element={<OrderList currentUser={currentUser} />}/>
-                        <Route path=':orderId' element={<OrderDetails currentUser={currentUser} service={service} employees={employees}/>} />
-                        
-                    </Route>
-                    <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
-
+    return (
+        <Routes>
+            <Route path="/" element={
+                <>
+                    <NavBar currentUser={currentUser} />
+                    <Outlet />
+                </>
+            }>
+                <Route index element={<h1>yuh</h1>} />
+             
+                <Route path='/orderList' >
+                    <Route index element={<OrderList currentUser={currentUser} />}/>
+                    <Route path=':orderId' element={<OrderDetails currentUser={currentUser} service={service} employees={employees}/>} />
+                    <Route path=':orderId/:pizzaId' element={<Pizzas /> } />
                 </Route>
-            </Routes>
-        )
-    }
+                <Route path='/NewOrder' element={<NewOrder service={service} setService={setService} currentUser={currentUser}/>} />
+
+            </Route>
+        </Routes>
+    )
+}
