@@ -15,17 +15,13 @@ export const getPizzaToppings = () => {
 
 }
 
-export const savePizza = (pizzaId, pizzaOptions) => {
-    return fetch(`http://localhost:8088/pizzas/${pizzaId}`, {
-      method: "POST",
+export const savePizza = async (updatedPizzaObject) => {
+    return fetch(`http://localhost:8088/pizzas/${updatedPizzaObject.id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        sizeId: pizzaOptions.size,
-        cheeseId: pizzaOptions.cheese,
-        sauceId: pizzaOptions.sauce,
-      }),
+      body: JSON.stringify(updatedPizzaObject),
     })
     .then((res) => res.json());
   };

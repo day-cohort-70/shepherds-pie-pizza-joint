@@ -3,14 +3,22 @@ import { Card, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
 //import { Pizzas } from "../Pizzas.jsx";
 
-export const PizzaCheese = ({ pizzaOptions, setPizzaOptions }) => {
+export const PizzaCheese = ({ pizzaOptions, setPizzaOptions, foundPizza }) => {
   const [pizzaCheese, setPizzaCheese] = useState([]);
+
 
   useEffect(() => {
     getPizzaCheeses().then((pizzaCheeseOptions) => {
       setPizzaCheese(pizzaCheeseOptions);
     });
   }, []);
+
+
+ // Check if foundPizza and pizzaCheese are both populated before rendering
+if (!foundPizza || !pizzaCheese.length) {
+  return <p>Loading...</p>;
+}
+
 
   return (
     <>
@@ -27,7 +35,10 @@ export const PizzaCheese = ({ pizzaOptions, setPizzaOptions }) => {
             setPizzaOptions(pizzaOptionsCopy);
           }}
         >
-          {pizzaCheese.map((pizzaCheeseObj) => {
+          {pizzaCheese.map((pizzaCheeseObj, index) => {
+            
+            const clickedBoxNumber = foundPizza?.cheeseId - 1
+          
             return (
               <Form.Check
                 inline
@@ -36,6 +47,7 @@ export const PizzaCheese = ({ pizzaOptions, setPizzaOptions }) => {
                 label={pizzaCheeseObj.type}
                 name="radioGroup"
                 value={pizzaCheeseObj.id}
+                defaultChecked={index === clickedBoxNumber}
               />
             );
           })}

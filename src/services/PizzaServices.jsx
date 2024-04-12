@@ -87,3 +87,9 @@ export const deletePizzaToppingObject = async (toppingId) => {
     method: "DELETE",
   })
 }
+
+export const getPizzaById = async (pizzaId) => {
+  return fetch(
+    `http://localhost:8088/pizzas/${pizzaId}`
+  ).then((res) => res.json());
+};

@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Card, Container, Row, Col, Button, Dropdown } from "react-bootstrap";
 import "./OrderDetails.css";
 
-import { assignDeliverer, deleteOrderById, getOrderById, updateDeliverer } from "../../services/OrdersService";
+import { assignDeliverer, deleteOrderById, getOrderById, updateDeliverer, updateOrder } from "../../services/OrdersService";
 import { createNewPizza, deletePizzaById, getAllPizzaToppings, getPizzasByOrderId, getToppingsByPizzaId } from "../../services/PizzaServices";
 import { getAllOrderDeliverers } from "../../services/OrderDelivererService";
 
@@ -41,10 +41,21 @@ export const OrderDetails = ({ currentUser, service, employees }) => {
     getAllPizzaToppings().then((toppings) => setPizzaToppings(toppings));
   }, [orderId]);
 
-  const handleDeletePizza = (pizzaId) => {
-    deletePizzaById(pizzaId).then(() => {
+  const handleDeletePizza = (pizza) => {
+    deletePizzaById(pizza.id).then(() => {
         getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
-    })   
+       debugger
+          const priceToSubtract = calculatePizzaPrice(pizza)
+          const updatedOrder = { ...order };
+          updatedOrder.orderTotal -= priceToSubtract
+        
+          // Update the order in the database
+          updateOrder(updatedOrder);
+        
+          // Navigate to the desired location
+          navigate(`/orderList/${orderId}`);
+        }
+    )   
 }
 const handleDelivererChange = (employee) => {setDelivererSelection(employee)}
      const calculatePizzaPrice = (pizza) => {
@@ -102,6 +113,18 @@ const handleAddPizza = () => {
   
 }
         
+const handleEditOrder = (editedPizzaPrice, pizzaId) => {
+  // Update the order total by subtracting the total price of the edited pizza
+  const updatedOrder = { ...order };
+  updatedOrder.orderTotal -= editedPizzaPrice;
+
+  // Update the order in the database
+  updateOrder(updatedOrder);
+
+  // Navigate to the desired location
+  navigate(`/orderList/${orderId}/${pizzaId}`);
+};
+
 
 
 
@@ -167,8 +190,17 @@ const handleAddPizza = () => {
             </div>
             <div className="order-details">Price: ${calculatePizzaPrice(pizza)}</div>
             <div className="orderlist-btns">
-                <Button variant="warning" className="btn-info">Edit</Button>
-                <Button variant="danger" className="btn-info" onClick={() => handleDeletePizza(pizza.id)}>Delete</Button>
+            <Button 
+    variant="warning" 
+    className="btn-info" 
+    onClick={() => {
+        handleEditOrder(calculatePizzaPrice(pizza), pizza.id);
+    }}
+>
+    Edit
+</Button>
+
+                <Button variant="danger" className="btn-info" onClick={() => handleDeletePizza(pizza)}>Delete</Button>
             </div>
         </div>
     ))}

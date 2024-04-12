@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { deletePizzaToppingObject, getAllPizzaToppingObjects, getAllPizzaToppings, getToppingsByPizzaId, postNewPizzaToppingObject } from "../../../services/PizzaServices.jsx";
 
-export const PizzaToppings = ({ pizzaOptions, setPizzaOptions, pizzaId }) => {
+export const PizzaToppings = ({ pizzaOptions, setPizzaOptions, pizzaId, setToppingsOnCurrentPizza }) => {
   const [pizzaToppings, setPizzaToppings] = useState([]);
   //to add one topping at a time to pizza
   const [addPizzaToppings, setAddPizzaToppings] = useState("");
@@ -21,9 +21,13 @@ export const PizzaToppings = ({ pizzaOptions, setPizzaOptions, pizzaId }) => {
       setPizzaToppings(pizzaToppingOptions);
     });
 getToppingsByPizzaId(pizzaId).then((toppingsArray) => setToppingsOnThisPizza(toppingsArray))
+
+
   }, [pizzaId]); // Fetch toppings whenever pizzaId changes
 
- 
+ useEffect(() => {
+setToppingsOnCurrentPizza(toppingsOnThisPizza)
+ },[toppingsOnThisPizza])
 
   const handleAddTopping = async () => {
     const newToppingObj = {
