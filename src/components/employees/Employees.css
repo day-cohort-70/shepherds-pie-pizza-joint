@@ -1,0 +1,7 @@
+.employee {
+    margin: 20px ;
+}
+.employee-details {
+    display: flex;
+    flex-direction: column;
+}
