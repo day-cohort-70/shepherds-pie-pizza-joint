@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import "./orders.css"
+import "./Orders.css"
 import Button from 'react-bootstrap/Button'
 import { FilterBar } from "./FilterBar"
 import { deleteOrderById, getAllOrders, updateOrder } from "../../services/OrdersService"
