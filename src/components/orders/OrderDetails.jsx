@@ -44,7 +44,7 @@ export const OrderDetails = ({ currentUser, service, employees }) => {
   const handleDeletePizza = (pizza) => {
     deletePizzaById(pizza.id).then(() => {
         getPizzasByOrderId(orderId).then((pizzaObjs) => {setPizzas(pizzaObjs)})
-       debugger
+   
           const priceToSubtract = calculatePizzaPrice(pizza)
           const updatedOrder = { ...order };
           updatedOrder.orderTotal -= priceToSubtract
