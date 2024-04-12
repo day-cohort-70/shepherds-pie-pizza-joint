@@ -36,6 +36,7 @@ useEffect(() => {
             "orderTotal": initialCost,
             "serviceType": service.type
         }
+        setService({type: "", table: 0})
         const response = await postNewOrder(order)
         const responseData = await response.json()
         const newOrderId = responseData.id
