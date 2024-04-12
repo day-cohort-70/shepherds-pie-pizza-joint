@@ -70,3 +70,26 @@ export const getAllSauces = async () => {
         body: JSON.stringify(pizzaObj)
     });
 }
+
+export const postNewPizzaToppingObject = async (toppingObj) => {
+  return fetch(`http://localhost:8088/pizzaToppings`, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(toppingObj)
+});
+}
+
+
+export const deletePizzaToppingObject = async (toppingId) => {
+  await fetch(`http://localhost:8088/pizzaToppings/${toppingId}`, {
+    method: "DELETE",
+  })
+}
+
+export const getPizzaById = async (pizzaId) => {
+  return fetch(
+    `http://localhost:8088/pizzas/${pizzaId}`
+  ).then((res) => res.json());
+};

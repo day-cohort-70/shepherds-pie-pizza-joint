@@ -25,13 +25,15 @@ useEffect(() => {
     const tables = [1,2,3,4,5,6,7,8,9,10]
 
     const handleCreateOrder = async () => {
+        let initialCost = 0
+        if (service.type === "Delivery"){initialCost += 5}
         const today = Date.now()
         const order = {
             "userId": currentUser.id,
             "date": today,
             "tableNumber": service.table,
             "tipAmount": 0,
-            "orderTotal": 0,
+            "orderTotal": initialCost,
             "serviceType": service.type
         }
         const response = await postNewOrder(order)

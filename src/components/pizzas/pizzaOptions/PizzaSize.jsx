@@ -3,14 +3,20 @@ import { Card, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
 //import { Pizzas } from "../Pizzas.jsx";
 
-export const PizzaSize = ({ pizzaOptions, setPizzaOptions }) => {
+export const PizzaSize = ({ pizzaOptions, setPizzaOptions, foundPizza }) => {
   const [pizzaSize, setPizzaSize] = useState([]);
+ 
 
   useEffect(() => {
     getPizzaSizes().then((pizzaSizeOptions) => {
       setPizzaSize(pizzaSizeOptions);
     });
   }, []);
+
+  if (!foundPizza || !pizzaSize.length) {
+    return <p>Loading...</p>;
+  }
+  
 
   return (
     <>
@@ -27,7 +33,8 @@ export const PizzaSize = ({ pizzaOptions, setPizzaOptions }) => {
             setPizzaOptions(pizzaOptionsCopy);
           }}
         >
-          {pizzaSize.map((pizzaSizeObj) => {
+          {pizzaSize.map((pizzaSizeObj, index) => {
+            const clickedBoxNumber = foundPizza?.sizeId - 1
             return (
               <Form.Check
                 inline
@@ -36,6 +43,7 @@ export const PizzaSize = ({ pizzaOptions, setPizzaOptions }) => {
                 label={pizzaSizeObj.size}
                 name="radioGroup"
                 value={pizzaSizeObj.id}
+                defaultChecked={index === clickedBoxNumber}
               />
             );
           })}
