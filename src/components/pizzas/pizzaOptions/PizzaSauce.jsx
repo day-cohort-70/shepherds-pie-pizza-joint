@@ -2,7 +2,7 @@ import { getPizzaSauces } from "../../../services/pizzaServices.js";
 import { Card, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
-export const PizzaSauce = ({ pizzaOptions, setPizzaOptions }) => {
+export const PizzaSauce = ({ pizzaOptions, setPizzaOptions, foundPizza }) => {
   const [pizzaSauce, setPizzaSauce] = useState([]);
 
   useEffect(() => {
@@ -10,6 +10,11 @@ export const PizzaSauce = ({ pizzaOptions, setPizzaOptions }) => {
       setPizzaSauce(pizzaSauceOptions);
     });
   }, []);
+
+  if (!foundPizza || !pizzaSauce.length) {
+    return <p>Loading...</p>;
+  }
+  
 
   return (
     <>
@@ -27,7 +32,8 @@ export const PizzaSauce = ({ pizzaOptions, setPizzaOptions }) => {
             setPizzaOptions(pizzaOptionsCopy);
           }}
         >
-          {pizzaSauce.map((pizzaSauceObj) => {
+          {pizzaSauce.map((pizzaSauceObj, index) => {
+            const clickedBoxNumber = foundPizza?.sauceId - 1
             return (
               <Form.Check
                 inline
@@ -36,6 +42,7 @@ export const PizzaSauce = ({ pizzaOptions, setPizzaOptions }) => {
                 label={pizzaSauceObj.type}
                 name="radioGroup"
                 value={pizzaSauceObj.id}
+                defaultChecked={index === clickedBoxNumber}
               />
             );
           })}

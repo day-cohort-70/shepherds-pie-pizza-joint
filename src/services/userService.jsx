@@ -25,3 +25,13 @@ export const getUserByEmail = (email) => {
   export const getEmployeeById = (employeeId) => {
     return fetch(`http://localhost:8088/users/${employeeId}`).then(res => res.json())
   }
+
+  export const saveEmployeeChanges = (employeeObj) => {
+    return fetch(`http://localhost:8088/users/${employeeObj.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(employeeObj)
+    })
+  }

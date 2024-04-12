@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react"
 import { Button, Card, Form } from "react-bootstrap"
-import { useParams } from "react-router-dom"
-import { getEmployeeById } from "../../services/userService"
+import { useNavigate, useParams } from "react-router-dom"
+import { getEmployeeById, saveEmployeeChanges } from "../../services/userService"
 
 export const EmployeeDetail = () => {
     const { employeeId } = useParams()
     const [employee, setEmployee] = useState()
+    const navigate = useNavigate()
 
     useEffect(() => {
         getEmployeeById(parseInt(employeeId)).then((res) => 
             setEmployee(res))
     }, [employeeId])
+
+
+    const handleSaveEmployee = () => {
+      saveEmployeeChanges(employee).then(
+        navigate("/employees")
+      )
+    }
 
     return (
       <Form>
@@ -68,7 +76,7 @@ export const EmployeeDetail = () => {
               }}
                />
             </Form.Group>
-            <Button variant="success">Success</Button>
+            <Button variant="success" onClick={handleSaveEmployee}>Save</Button>
           </div>
           
         ) : (
